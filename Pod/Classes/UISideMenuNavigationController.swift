@@ -43,11 +43,29 @@ open class UISideMenuNavigationController: UINavigationController {
         }
     }
     
+    override open func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // To prevent a presented controller from closing when rotating a Plus device or iPad in multitask mode
+        if presentedViewController != nil {
+            view.isHidden = true
+            SideMenuTransition.hideMenuStart()
+        }
+    // If this would work properly it would be better than closing the menu like above
+    // let size = view.bounds.size
+    // SideMenuTransition.presentMenuStart(forSize: size)
+    }
+
     override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         // we had presented a view before, so lets dismiss ourselves as already acted upon
         if view.isHidden {
+            // To prevent a presented controller from closing when rotating a Plus device or iPad in multitask mode
+            if presentedViewController != nil {
+                view.isHidden = false
+                return
+            }
             SideMenuTransition.hideMenuComplete()
             dismiss(animated: false, completion: { () -> Void in
                 self.view.isHidden = false
@@ -81,6 +99,10 @@ open class UISideMenuNavigationController: UINavigationController {
         
         // we're presenting a view controller from the menu, so we need to hide the menu so it isn't  g when the presented view is dismissed.
         if !isBeingDismissed {
+            // To prevent a presented controller from closing when rotating a Plus device or iPad in multitask mode
+            if presentedViewController != nil {
+                return
+            }
             view.isHidden = true
             SideMenuTransition.hideMenuStart()
         }

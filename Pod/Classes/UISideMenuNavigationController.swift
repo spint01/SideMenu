@@ -7,6 +7,9 @@
 
 import UIKit
 
+let sideMenuDidAppearNotification = NSNotification.Name("sideMenuDidAppearNotification")
+let sideMenuDidDisappearNotification = NSNotification.Name("sideMenuDidDisappearNotification")
+
 open class UISideMenuNavigationController: UINavigationController {
     
     internal var originalMenuBackgroundColor: UIColor?
@@ -70,6 +73,8 @@ open class UISideMenuNavigationController: UINavigationController {
             dismiss(animated: false, completion: { () -> Void in
                 self.view.isHidden = false
             })
+        } else {
+            NotificationCenter.default.post(name: sideMenuDidAppearNotification, object: nil)
         }
     }
     
@@ -105,6 +110,8 @@ open class UISideMenuNavigationController: UINavigationController {
             }
             view.isHidden = true
             SideMenuTransition.hideMenuStart()
+        } else {
+            NotificationCenter.default.post(name: sideMenuDidDisappearNotification, object: nil)
         }
     }
     

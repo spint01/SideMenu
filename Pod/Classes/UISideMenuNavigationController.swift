@@ -123,11 +123,9 @@ open class UISideMenuNavigationController: UINavigationController {
             return
         }
         
-        SideMenuTransition.statusBarView?.isHidden = true
         coordinator.animate(alongsideTransition: { (context) -> Void in
             SideMenuTransition.presentMenuStart(forSize: size)
             }) { (context) -> Void in
-                SideMenuTransition.statusBarView?.isHidden = false
         }
     }
     
